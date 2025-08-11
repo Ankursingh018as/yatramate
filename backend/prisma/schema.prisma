@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password_hash String
+  avatar_url    String?
+  preferences   Json?
+  trips         Trip[]
+  groupVotes    GroupVote[]
+  auditLogs     AuditLog[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model Trip {
+  id              Int      @id @default(autoincrement())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          Int
+  title           String
+  description     String?
+  start_date      DateTime
+  end_date        DateTime
+  budget_estimate Float
+  currency        String
+  is_public       Boolean  @default(false)
+  visibility_token String? @unique
+  status          String
+  stops           Stop[]
+  groupVotes      GroupVote[]
+  bookings        Booking[]
+  auditLogs       AuditLog[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+model Stop {
+  id            Int      @id @default(autoincrement())
+  trip          Trip     @relation(fields: [tripId], references: [id])
+  tripId        Int
+  city_name     String
+  country       String
+  lat           Float
+  lng           Float
+  arrival_date  DateTime
+  departure_date DateTime
+  order_index   Int
+  activities    Activity[]
+}
+model Activity {
+  id              Int      @id @default(autoincrement())
+  stop            Stop     @relation(fields: [stopId], references: [id])
+  stopId          Int
+  name            String
+  description     String?
+  start_datetime  DateTime
+  end_datetime    DateTime
+  duration_minutes Int
+  cost_estimate   Float
+  booking_provider String?
+  external_id     String?
+  status          String
+}
+model GroupVote {
+  id      Int  @id @default(autoincrement())
+  trip    Trip @relation(fields: [tripId], references: [id])
+  tripId  Int
+  user    User @relation(fields: [userId], references: [id])
+  userId  Int
+  vote    String
+}
+model Booking {
+  id                  Int    @id @default(autoincrement())
+  trip                Trip   @relation(fields: [tripId], references: [id])
+  tripId              Int
+  provider            String
+  provider_booking_id String
+  type                String
+  cost                Float
+  status              String
+}
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  tripId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  event_type String
+  event_data Json
+  created_at DateTime @default(now())
+}

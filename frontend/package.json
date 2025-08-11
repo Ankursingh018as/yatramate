@@ -1,0 +1,27 @@
+{
+  "name": "yatramate-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "axios": "^1.6.7",
+    "chart.js": "^4.4.0",
+    "mapbox-gl": "^3.2.0",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.7.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.56.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.1"
+  }
+}
